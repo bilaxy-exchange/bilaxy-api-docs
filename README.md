@@ -2,4 +2,4 @@
 
 [restapi.md](./restapi.md)
 
-[WIP][websocket.md](./websocket.md)
+[websocket.md](./websocket.md)
