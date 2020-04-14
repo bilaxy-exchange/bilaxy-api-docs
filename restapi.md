@@ -15,6 +15,7 @@
     - [/v1/orderbook](#v1orderbook)
     - [/v1/trades](#v1trades)
     - [/v1/ticker/24hr](#v1ticker24hr)
+    - [/v1/valuation-calculator](#v1valuation-calculator)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -249,6 +250,30 @@ pair | string | false | Specify the name of the trading pair, such as `BTC_USDT`
   }
 }
 ```
+
+
+### /v1/valuation-calculator
+Get currency's BTC, USD and CNY valuation.
+
+**Method:** `GET`
+
+**Parameters:**
+
+Name | Type | Required | Description
+------------|------------|------------|------------
+currency | string | false | Specify the name of the currency, such as `ETH`.
+
+**Response:**
+```
+{
+  "ETH": {
+    "btc_value": "0.0230850000",
+    "usd_value": "157.2425541000",
+    "cny_value": "1084.8163807359"
+  }
+}
+```
+
 
 
 
