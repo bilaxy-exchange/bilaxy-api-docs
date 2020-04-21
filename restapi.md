@@ -491,26 +491,30 @@ signature | string | true | .
 ```
 [
   {
-    "id": 617318768,
-    "order_id": 3144483307,
-    "total": 7882.4843247,
-    "price": 9114.1,
-    "amount": 0.864867,
-    "created_at": "2020-03-06T07:30:04Z",
-    "role": "maker",
-    "direction": "buy",
-    "pair": "BTC_USDT"
-  },
-  {
-    "id": 617318769,
-    "order_id": 3144483308,
-    "total": 7882.4843247,
-    "price": 9114.1,
-    "amount": 0.864867,
-    "created_at": "2020-03-06T07:30:04Z",
+    "id": 716797287,
+    "order_id": 4141266876,
+    "total": 0.0345,
+    "price": 0.0000345,
+    "amount": 1000,
+    "created_at": "2020-04-10T19:00:14Z",
     "role": "taker",
     "direction": "buy",
-    "pair": "BTC_USDT"
+    "pair": "BIA_ETH",
+    "fees": 0.96189591,
+    "fees_currency": "BIA"
+  },
+  {
+    "id": 716797286,
+    "order_id": 4141266829,
+    "total": 0.0345,
+    "price": 0.0000345,
+    "amount": 1000,
+    "created_at": "2020-04-10T18:59:11Z",
+    "role": "maker",
+    "direction": "sell",
+    "pair": "BIA_ETH",
+    "fees": 0.96189591,
+    "fees_currency": "BIA"
   }
 ]
 ```
