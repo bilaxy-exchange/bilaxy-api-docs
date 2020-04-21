@@ -1,5 +1,11 @@
 # Official Documentation for the Bilaxy APIs and Websockets.
 
-[restapi.md](./restapi.md)
+[REST API Doc](./restapi.md)
 
-[websocket.md](./websocket.md)
+[Webscoket Doc](./websocket.md)
+
+[CHANGELOG](./CHANGELOG.md)
+
+### SDK
+
+[Python Simple SDK](./py_simple_sdk.py)
