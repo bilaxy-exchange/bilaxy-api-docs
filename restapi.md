@@ -7,25 +7,27 @@
 - [Error Codes](#error-codes)
 - [Public API Endpoints](#public-api-endpoints)
   - [General endpoints](#general-endpoints)
-    - [/health](#health)
-    - [/ratelimits](#ratelimits)
+    - [GET /health](#get-health)
+    - [GET /ratelimits](#get-ratelimits)
   - [Market Info endpoints](#market-info-endpoints)
-    - [/v1/pairs](#v1pairs)
-    - [/v1/currencies](#v1currencies)
-    - [/v1/orderbook](#v1orderbook)
-    - [/v1/trades](#v1trades)
-    - [/v1/ticker/24hr](#v1ticker24hr)
-    - [/v1/valuation](#v1valuation)
+    - [GET /v1/pairs](#get-v1pairs)
+    - [GET /v1/currencies](#get-v1currencies)
+    - [GET /v1/orderbook](#get-v1orderbook)
+    - [GET /v1/trades](#get-v1trades)
+    - [GET /v1/ticker/24hr](#get-v1ticker24hr)
+    - [GET /v1/valuation](#get-v1valuation)
 - [Private API Endpoints](#private-api-endpoints)
   - [About signature](#about-signature)
   - [About timestamp](#about-timestamp)
   - [Account endpoints](#account-endpoints)
-    - [/v1/accounts/balances](#v1accountsbalances)
-    - [/v1/accounts/order](#v1accountsorder)
-    - [/v1/accounts/orders](#v1accountsorders)
-    - [/v1/accounts/orders/opened](#v1accountsordersopened)
-    - [/v1/accounts/trades](#v1accountstrades)
-    - [/v1/accounts/addresses/deposit](#v1accountsaddressesdeposit)
+    - [GET /v1/accounts/balances](#get-v1accountsbalances)
+    - [GET /v1/accounts/order](#get-v1accountsorder)
+    - [GET /v1/accounts/orders](#get-v1accountsorders)
+    - [GET /v1/accounts/orders/opened](#get-v1accountsordersopened)
+    - [GET /v1/accounts/trades](#get-v1accountstrades)
+    - [GET /v1/accounts/addresses/deposit](#get-v1accountsaddressesdeposit)
+    - [POST /v1/accounts/orders](#post-v1accountsorders)
+    - [DELETE /v1/accounts/orders](#delete-v1accountsorders)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -42,6 +44,10 @@ Any endpoint can return an ERROR
 - 1003 - Signature for this request is not valid.
 - 1004 - Timestamp cannot be 1000ms later than server time, no earlier than server time 5000ms.
 - 1005 - Currency's deposit is disabled.
+- 1006 - Pair is disabled.
+- 1007 - Pair trading is closed.
+- 1008 - The order has been fully filled or cancelled.
+- 1009 - The order has changed.
 
 
 Example:
@@ -57,10 +63,8 @@ Example:
 
 ## General endpoints
 
-### /health
+### GET /health
 Test connection to RestAPI and get server time.
-
-**Method:** `GET`
 
 **Parameters:** `None`
 
@@ -73,10 +77,8 @@ Test connection to RestAPI and get server time.
 }
 ```
 
-### /ratelimits
+### GET /ratelimits
 Returns the rate limit for all api calls for a single ip.
-
-**Method:** `GET`
 
 **Parameters:** `None`
 
@@ -119,10 +121,8 @@ x-ratelimit-reset | integer | Timestamp when calls were restored.
 
 ## Market Info endpoints
 
-### /v1/pairs
+### GET /v1/pairs
 Returns trading pairs.
-
-**Method:** `GET`
 
 **Parameters:**
 
@@ -149,10 +149,8 @@ pair | string | false | Specify the name of the trading pair, such as `BTC_USDT`
 }
 ```
 
-### /v1/currencies
+### GET /v1/currencies
 Returns currencies information.
-
-**Method:** `GET`
 
 **Parameters:**
 
@@ -177,10 +175,8 @@ currency | string | false | Specify the name of the currency name, such as `BTC`
 }
 ```
 
-### /v1/orderbook
+### GET /v1/orderbook
 Returns the depth data of a single trading market.
-
-**Method:** `GET`
 
 **Parameters:**
 
@@ -216,10 +212,8 @@ pair | string | true | Specify the name of the trading pair, such as `BTC_USDT`.
 ```
 
 
-###  /v1/trades
+### GET /v1/trades
 Returns recent trading history for a single market.
-
-**Method:** `GET`
 
 **Parameters:**
 
@@ -232,7 +226,6 @@ limit | integer | false | Number of trades history. Default 100, max 2000.
 ```
 [
   {
-    "id": 734733434,
     "price": "7175.70",
     "amount": "0.189702",
     "total": "1361.24464140",
@@ -240,7 +233,6 @@ limit | integer | false | Number of trades history. Default 100, max 2000.
     "direction": "sell"
   },
   {
-    "id": 734733433,
     "price": "7175.84",
     "amount": "0.413760",
     "total": "2969.07555840",
@@ -251,10 +243,8 @@ limit | integer | false | Number of trades history. Default 100, max 2000.
 ```
 
 
-### /v1/ticker/24hr
+### GET /v1/ticker/24hr
 Get ticker data for trading pairs.
-
-**Method:** `GET`
 
 **Parameters:**
 
@@ -279,10 +269,8 @@ pair | string | false | Specify the name of the trading pair, such as `BTC_USDT`
 ```
 
 
-### /v1/valuation
+### GET /v1/valuation
 Get currency's BTC, USD and CNY valuation.
-
-**Method:** `GET`
 
 **Parameters:**
 
@@ -313,11 +301,9 @@ currency | string | false | Specify the name of the currency, such as `ETH`.
 
 ## Account endpoints
 
-### /v1/accounts/balances
+### GET /v1/accounts/balances
 Get user balances.
 API-key requires `READONLY` or `ALL` permissions.
-
-**Method:** `GET`
 
 **Parameters:**
 Name | Type | Required | Description
@@ -344,15 +330,14 @@ signature | string | true | .
 }
 ```
 
-### /v1/accounts/order
+### GET /v1/accounts/order
 Get order by id.
 API-key requires `READONLY` or `ALL` permissions.
-
-**Method:** `GET`
 
 **Parameters:**
 Name | Type | Required | Description
 ------------|------------|------------|------------
+pair | string | true | Pair name. such as `BTC_USDT`.
 id | long | true | Order id.
 timestamp | timestamp(ms) | true | Current request timestamp(ms).
 apikey | string | true | .
@@ -375,11 +360,9 @@ signature | string | true | .
 }
 ```
 
-### /v1/accounts/orders
+### GET /v1/accounts/orders
 Get user orders.
 API-key requires `READONLY` or `ALL` permissions.
-
-**Method:** `GET`
 
 **Parameters:**
 Name | Type | Required | Description
@@ -424,11 +407,9 @@ signature | string | true | .
 ]
 ```
 
-### /v1/accounts/orders/opened
+### GET /v1/accounts/orders/opened
 Get user all opened orders.
 API-key requires `READONLY` or `ALL` permissions.
-
-**Method:** `GET`
 
 **Parameters:**
 Name | Type | Required | Description
@@ -468,11 +449,9 @@ signature | string | true | .
 ]
 ```
 
-### /v1/accounts/trades
+### GET /v1/accounts/trades
 Get user all trades.
 API-key requires `READONLY` or `ALL` permissions.
-
-**Method:** `GET`
 
 **Parameters:**
 Name | Type | Required | Description
@@ -519,11 +498,9 @@ signature | string | true | .
 ]
 ```
 
-### /v1/accounts/addresses/deposit
+### GET /v1/accounts/addresses/deposit
 Get user deposit addresses.
 API-key requires `READONLY` or `ALL` permissions.
-
-**Method:** `GET`
 
 **Parameters:**
 Name | Type | Required | Description
@@ -538,4 +515,54 @@ signature | string | true | .
 [
   "3Fbg7sVAYopLP6PhEtTJYzDojc9NNPr4vW"
 ]
+```
+
+### POST /v1/accounts/orders
+Create user orders.
+API-key requires `ALL` permissions.
+
+**Parameters:**
+Name | Type | Required | Description
+------------|------------|------------|------------
+timestamp | timestamp(ms) | true | Current request timestamp(ms).
+apikey | string | true | .
+signature | string | true | 
+
+**Body(JSON):**
+Name | Type | Required | Description
+------------|------------|------------|------------
+pair | string | true | Pair name. such as `BTC_USDT`.
+side | string | true | Only `buy` or `sell`.
+price | string | true | String type decimal, such as `"20000.66"`.
+quantity | string | true | String type decimal, such as `"0.666"`.
+
+**Response:**
+```
+STATUS_CODE: 201
+
+{
+  "id": "4141252867"
+}
+```
+
+### DELETE /v1/accounts/orders
+Cancel user orders.
+API-key requires `ALL` permissions.
+
+**Parameters:**
+Name | Type | Required | Description
+------------|------------|------------|------------
+timestamp | timestamp(ms) | true | Current request timestamp(ms).
+apikey | string | true | .
+signature | string | true |
+
+**Body(JSON):**
+Name | Type | Required | Description
+------------|------------|------------|------------
+pair | string | true | Pair name. such as `BTC_USDT`.
+id | string | true | Order id.
+
+**Response:**
+```
+STATUS_CODE: 204
 ```

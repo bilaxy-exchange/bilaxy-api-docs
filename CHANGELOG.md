@@ -1,3 +1,10 @@
+## 2020.11.30
+- Add method before url.
+- Added the following private APIs.
+    + `POST /v1/accounts/orders`
+    + `DELETE /v1/accounts/orders`
+- For `GET /v1/accounts/order` API, add the required parameter `pair`.
+
 ## 2020.04.20
 
 Added a portion of the documentation for the private API, optimizing the naming of some API URLs.
