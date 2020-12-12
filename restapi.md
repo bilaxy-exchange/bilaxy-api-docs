@@ -187,6 +187,7 @@ Returns the depth data of a single trading market.
 Name | Type | Required | Description
 ------------|------------|------------|------------
 pair | string | true | Specify the name of the trading pair, such as `BTC_USDT`.
+limit | integer | false | The number of depths returned, the maximum is 200, the default is 30.
 
 **Response:**
 ```

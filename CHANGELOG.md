@@ -1,3 +1,6 @@
+## 2020.12.12
+- `/v1/orderbook` add the parameter `limit`, in order to limit the number of depths returned, the default is 30, and the maximum is 200.
+
 ## 2020.04.20
 
 Added a portion of the documentation for the private API, optimizing the naming of some API URLs.
